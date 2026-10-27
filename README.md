@@ -9,6 +9,8 @@
 
 把云盘变成可用脚本和 Agent 操作的东西：38 个 CLI 命令 + 25 个 MCP 工具，同一份代码跑在 macOS / Windows / 安卓 Termux 上。
 
+*A zero-dependency CLI + MCP (Model Context Protocol) server for China Unicom Cloud Drive (联通云盘, `wocloud` / `wopan`) — file management, upload/download, sharing, trash and batch backup, scriptable on macOS, Windows, Linux and Termux, and directly operable by AI agents.*
+
 > 本项目通过互操作性分析实现，**不是**官方客户端，与联通公司无任何隶属关系。使用前请阅读下面的[免责声明](#免责声明)。
 
 ---

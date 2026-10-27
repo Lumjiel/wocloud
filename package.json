@@ -2,25 +2,36 @@
   "name": "wocloud-cli",
   "version": "1.0.0",
   "private": true,
-  "description": "联通云盘第三方客户端 —— CLI + MCP Server，零依赖，多端可用",
+  "description": "联通云盘第三方 CLI + MCP Server，零依赖，多端可用",
   "type": "module",
   "license": "MIT",
   "author": "Lumjiel",
-  "homepage": "https://github.com/Lumjiel/wocloud#readme",
+  "homepage": "https://github.com/Lumjiel/wocloud-public#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lumjiel/wocloud.git"
+    "url": "git+https://github.com/Lumjiel/wocloud-public.git"
   },
   "bugs": {
-    "url": "https://github.com/Lumjiel/wocloud/issues"
+    "url": "https://github.com/Lumjiel/wocloud-public/issues"
   },
   "keywords": [
     "wocloud",
-    "联通云盘",
+    "wopan",
+    "unicom",
+    "china-unicom",
     "cloud-drive",
+    "netdisk",
+    "cloud-storage",
     "cli",
+    "command-line",
     "mcp",
     "model-context-protocol",
+    "mcp-server",
+    "ai-agent",
+    "llm-tools",
+    "termux",
+    "cross-platform",
+    "backup",
     "zero-dependency"
   ],
   "bin": {
