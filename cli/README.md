@@ -194,7 +194,7 @@ CLI 按以下优先级获取 accessToken：
 
 加密:
   AES-128-CBC / PKCS7
-  IV  = "wNSOYIB1k1DjY5lA"   (固定)
+  IV  = <16 字节固定常量>     (随客户端分发)
   key = secretKey 或 accessToken（超 16 字节则截断）
 
 响应:

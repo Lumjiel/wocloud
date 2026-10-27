@@ -202,7 +202,7 @@ MCP_TOKEN=<强随机串> node mcp/server.mjs --http --port 8788
 
 - **双 dispatcher**：`/api-user/dispatcher`（secretKey 加密）与 `/wohome/dispatcher`（accessToken 加密）
 - **签名**：`md5(key + resTime + reqSeq + channel + "")`，本身不含密钥
-- **加密**：AES-128-CBC / PKCS7，固定 IV `wNSOYIB1k1DjY5lA`
+- **加密**：AES-128-CBC / PKCS7，固定 16 字节 IV（随客户端分发，见 `wocloud-core.mjs`）
 - **上传域名按账号分区**（`GetZoneInfo`）；直链 120 分钟过期，需换链续传
 - **分享/匿名接口**：`secretType: "clientSecret"`，body 必须带**顶层 `clientId`**，否则只返回 `1000 参数错误`
 

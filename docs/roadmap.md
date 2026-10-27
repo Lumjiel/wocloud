@@ -57,7 +57,7 @@
 
 | key | 说明 |
 | --- | --- |
-| `PcWebLogin` | 手机号 + 密码登录，`clientSecret = XFmi9GS2hzk98jGX` |
+| `PcWebLogin` | 手机号 + 密码登录，需网页端 `clientSecret`（见 `protocol.md` 第 6 节） |
 | `PcLoginVerifyCode` | 手机号 + 短信验证码登录，参数同上 |
 | `AppLogout` | 登出（使当前 token 失效） |
 
@@ -97,8 +97,8 @@
 | 下载直链 | `GetDownloadUrlV2` | 自己的 accessToken | 分享 fid 直接用；未登录不行（网页端也是强制登录） |
 
 > `QueryShareFiles` 参数未解（多种组合都回 1000）——目录型分享的内部浏览暂缺，需真机抓包再补。
-> `clientSecret = XFmi9GS2hzk98jGX`（`pan.wo.cn/bridge.js` 里 `obfuscatorAESCodeProd`），
-> IV 与 App 相同 `wNSOYIB1k1DjY5lA`，且 body 必须同时带 `secretType:"clientSecret"` 与**顶层 `clientId`**。
+> `clientSecret` 取自 `pan.wo.cn/bridge.js` 挂到 `window` 的 `obfuscatorAESCodeProd`，
+> IV 与 App 相同（固定 16 字节），且 body 必须同时带 `secretType:"clientSecret"` 与**顶层 `clientId`**。
 
 > 上传链路的**真实回归**（真的传一个文件）在有写权限的机器上执行：本项目约定平板只读，
 > 不做写操作。平板侧已验证：`GetZoneInfo` 解析到 `hyupload`、缓存生效、

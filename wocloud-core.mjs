@@ -36,6 +36,12 @@ export const UPLOAD_API = "https://tjupload.pan.wo.cn";
 export const UPLOAD_PATH = "/openapi/client/upload2C";
 export const CHUNK_SIZE = 16 * 1024 * 1024;
 export const SMALL_FILE_LIMIT = 3 * 1024 * 1024;
+/**
+ * 以下常量是官方客户端**内置**的，随安装包一同分发（app.js 模块 403a / bridge.js），
+ * 既不是服务端机密，也不是用户凭证 —— 装了客户端的人都能自行取出。
+ * 本项目必须用到它们才能与官方接口互通，因此内置一份；
+ * 文档（docs/protocol.md 第 6 节）只记录来源与用途，不重复列值。
+ */
 export const AES_IV = "wNSOYIB1k1DjY5lA";
 
 /** 网页端 clientSecret（分享页等匿名 visible 接口用它做 AES 密钥，来源：pan.wo.cn/bridge.js + SDK 文档） */

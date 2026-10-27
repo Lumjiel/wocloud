@@ -149,7 +149,7 @@ sign = md5(key + resTime + reqSeq + channel + "").toLowerCase()
 逆向位置：`app.js` 模块 `90c5`
 
 ```js
-const IV = "wNSOYIB1k1DjY5lA";          // 硬编码固定 IV
+const IV = "<固定 16 字节常量>";         // 硬编码固定 IV，非随机
 
 encrypt(plain, key) = CryptoJS.AES.encrypt(
     CryptoJS.enc.Utf8.parse(plain),
@@ -168,7 +168,7 @@ Buffer.concat([c.update(plain, "utf8"), c.final()]).toString("base64");
 ```
 
 - 算法：**AES-128-CBC / PKCS7**
-- IV：固定字符串 `wNSOYIB1k1DjY5lA`（非随机，因此密文可复现）
+- IV：固定 16 字节常量（非随机，因此密文可复现），随客户端一同分发
 - 密钥：`secretKey`（api-user）或 `accessToken`（wohome），超长则截断到 16 字节
 
 ### 5.5 响应结构
@@ -206,31 +206,34 @@ Buffer.concat([c.update(plain, "utf8"), c.final()]).toString("base64");
 
 来源：`app.js` 模块 `403a`（按 `VUE_APP_SECRET_URL=prod` 取 prod 分支）
 
-```js
-{
-  loginTicket: { dev: "Rb6XXF7iI43x3h3O", prod: "n5RPfc4M3H6Mmk8C" },
-  cloud:       { dev: "w7FE23lHn49ab2Jn", prod: "9v5S25F2k7JUSrC9" },
-  win:         { dev: "mGC7mJjEN3lRKSby", prod: "s72g2VY46ahlK588" },
-  mac:         { dev: "ZUMtEQoR1Gz5w7D4",  prod: "32QXmaEWaI5H56l5" },
-  linux:       { dev: "<构建期注入>",      prod: "<构建期注入>" }
-}
-```
+本节只说明**密钥从哪来、用在哪、有多长**，不重复列值 —— 这些常量随官方客户端一同分发，
+装了客户端的人都能自行取出；本项目运行所需的一份内置在
+[`wocloud-core.mjs`](../wocloud-core.mjs) 顶部常量区。
 
-**macOS 客户端使用**：`secretKey = 32QXmaEWaI5H56l5`（恰好 16 字符，无需截断）
+| 用途 | 结构 | 长度 |
+| --- | --- | --- |
+| `loginTicket` | `dev` / `prod` 各一个 | 16 字符 |
+| `cloud` | `dev` / `prod` 各一个 | 16 字符 |
+| `win` | `dev` / `prod` 各一个 | 16 字符 |
+| `mac` | `dev` / `prod` 各一个 | 16 字符 |
+| `linux` | 构建期注入 | — |
 
-另有若干硬编码常量，例如 `app.js` 中 `Fe = "oN6@sH8!fV1{vJ1#"`，以及部分接口使用独立密钥对
-`"KrEj3WxoKitfRfkC"` / `"4KewNGDcHa3Q4cTX"`（用于 `/wohome/free/...` 与 B 端接口）。
+- macOS 客户端用 `mac.prod` 作为 `secretKey`，恰好 16 字符，无需截断
+- 另有若干硬编码常量（`app.js` 中的 `Fe`）与部分接口专用的密钥对（用于 `/wohome/free/...` 与 B 端接口），取法与上表同源
 
 ### 网页端 clientSecret（2026-10-26 新增，分享页实测）
 
-`https://pan.wo.cn/bridge.js` 在加载时往 `window` 上挂 4 个常量（混淆数组解析后）：
+`https://pan.wo.cn/bridge.js` 在加载时往 `window` 上挂 4 个常量（由混淆数组运行时解析）：
 
-```js
-window.obfuscatorAESCodeProd = "XFmi9GS2hzk98jGX"   // 网页端 AES 密钥（= clientSecret）
-window.obfuscatorAESCodeDev  = "Bb3112tvugGprVDy"
-window.obfuscatorAESIv       = "wNSOYIB1k1DjY5lA"   // 与 App 同一个 IV
-window.obfuscatorUmengfe     = "6355efa788ccdf4b7e52090e"
-```
+| window 变量 | 用途 |
+| --- | --- |
+| `obfuscatorAESCodeProd` | 网页端 AES 密钥（即 `clientSecret`），16 字符 |
+| `obfuscatorAESCodeDev` | 同上，dev 分支 |
+| `obfuscatorAESIv` | 与 App 相同的固定 IV |
+| `obfuscatorUmengfe` | 埋点标识，24 位十六进制 |
+
+需要取值时打开 `pan.wo.cn`，控制台执行
+`Object.keys(window).filter(k => k.startsWith("obfuscator"))` 即可列出。
 
 用法（`chunk-5b6b8a55` 分享页源码）：
 
